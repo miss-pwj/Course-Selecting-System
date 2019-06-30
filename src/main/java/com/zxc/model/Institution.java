@@ -1,5 +1,7 @@
 package com.zxc.model;
 
+import org.springframework.stereotype.Component;
+
 public class Institution {
     private int insId;
     private String insName;

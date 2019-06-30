@@ -171,13 +171,20 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course queryCourse(int id) {
         Course course=courseDao.selectCourseByClassId(id);
-        List<Integer> limit_list=courseDao.selectInsIdByClassId(id);
-        course.setClassLimitInsName(new ArrayList<>());
-        for(Integer i:limit_list){
-            course.getClassLimitInsName().add(courseDao.selectNameByInsId(i));
+        System.out.println(course);
+        if(course==null){
+            return null;
+        }else{
+            List<Integer> limit_list=courseDao.selectInsIdByClassId(id);
+            course.setClassLimitInsName(new ArrayList<>());
+            for(Integer i:limit_list){
+                course.getClassLimitInsName().add(courseDao.selectNameByInsId(i));
+            }
+            course.setTeaName(courseDao.selectTeaNameByTeaId(course.getTeaId()));
+            return course;
         }
-        course.setTeaName(courseDao.selectTeaNameByTeaId(course.getTeaId()));
-        return course;
+
+
     }
 
     @Override

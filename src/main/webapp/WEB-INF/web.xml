@@ -43,6 +43,8 @@
 
   <!--欢迎页面-->
   <welcome-file-list>
+    <welcome-file>/WEB-INF/views/login.jsp</welcome-file>
+    <welcome-file>/WEB-INF/views/admin.jsp</welcome-file>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
 
@@ -80,5 +82,6 @@
       <taglib-location>/WEB-INF/lib/tld/x-1_0-rt.tld</taglib-location>
     </taglib>
   </jsp-config>
+
 
 </web-app>

@@ -14,4 +14,16 @@ public interface UserService {
     public void changeStuPass(Student student);
     public void changeTeaPass(Teacher teacher);
     public List<Teacher> queryAllTeacher();
+
+    public List<Student> queryAllStudent();//查询全部学生
+
+    public void addStudent(Student student);
+
+    public void addTeacher(Teacher teacher);
+
+    public void deleteStudentById(String Id);
+
+    public void deleteTeacherById(String teaId);
+
+
 }

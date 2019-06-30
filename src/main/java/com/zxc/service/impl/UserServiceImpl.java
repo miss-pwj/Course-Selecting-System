@@ -1,5 +1,6 @@
 package com.zxc.service.impl;
 
+import com.zxc.dao.CourseDao;
 import com.zxc.dao.UserDao;
 import com.zxc.model.Student;
 import com.zxc.model.Teacher;
@@ -15,8 +16,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private CourseDao courseDao;
+    //判断用户权限
     @Override
     public int checkAccount(int id, String pass) {
+
         if(Integer.toString(id).charAt(4)=='1'){
             if(userDao.selectTeaById(id).getTeaPass().equals(pass))
                 return 2;
@@ -64,5 +69,53 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Teacher> queryAllTeacher() {
         return userDao.queryAllTeacher();
+    }
+
+    @Override
+    public List<Student> queryAllStudent() {
+        return userDao.queryAllStudent();
+    }
+
+    @Override
+    public void addStudent(Student student) {
+        student.setInsName(courseDao.selectNameByInsId(student.getInsId()));
+        userDao.addStudent(student);
+    }
+
+    @Override
+    public void addTeacher(Teacher teacher) {
+        userDao.addTeacher(teacher);
+    }
+
+    @Override
+    public void deleteStudentById(String Id) {
+        System.err.println("进入删除学生");
+        userDao.deleteStudentById(Id);
+        List<Integer> ints = userDao.querryAllChooseIdByStuId(Id);
+        System.out.println(ints.size());
+        for (int i:ints){
+            System.err.println("课程编号"+i);
+            userDao.deleteAllCourseByChooseId(i);
+        }
+
+    }
+    
+    public static void main(String[] args){
+        UserServiceImpl userService = new UserServiceImpl();
+        userService.deleteStudentById("2018000015");
+    }
+
+    @Override
+    public void deleteTeacherById(String teaId) {
+        userDao.deleteTeacherById(teaId);
+      /*  List<Integer> ints =userDao.selectClassIdByTeaId(teaId);
+ */
+        List<Integer> list = courseDao.queryCourseIdByTeaId(teaId);
+        System.err.println("长度"+list.size());
+        for (int li:list){
+            System.err.println("长度li"+li);
+            userDao.deleteCourseByClassId(li);
+        }
+
     }
 }

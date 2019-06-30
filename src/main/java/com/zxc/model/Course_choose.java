@@ -38,4 +38,5 @@ public class Course_choose {
     public int getScore() {
         return score;
     }
+    
 }

@@ -25,5 +25,39 @@
     <select id="queryAllTeacher" resultType="Teacher">
         SELECT * FROM Teacher
     </select>
+    <select id="addStudent" parameterType="Student">
+        insert into student(stuId,stuName,stuPass,insId,insName) values(#{stuId},#{stuName},#{stuPass},#{insId},#{insName})
+    </select>
+    <select id="addTeacher" parameterType="Teacher">
+        insert into teacher(teaId,teaName,teaPass) values(#{teaId},#{teaName},#{teaPass})
+    </select>
+
+    <select id="queryAllStudent" resultType="Student">
+        select * from student
+    </select>
+    <delete id="deleteStudentById" parameterType="String">
+        delete from student where stuId=#{stuId}
+    </delete>
+    <delete id="deleteAllCourseByChooseId" parameterType="int">
+        delete from course_choose where chooseId=#{chooseId}
+    </delete>
+    <select id="querryAllChooseIdByStuId" parameterType="String" resultType="int">
+
+        select chooseId from course_choose where stuId=#{stuId}
+    </select>
+    <delete id="deleteAllCourseByStuId" parameterType="String">
+        delete from course where teaId=#{teaId}
+    </delete>
+    <delete id="deleteCourseByClassId" parameterType="int">
+        delete from course where classId=#{classId}
+    </delete>
+    <select id="selectClassIdByTeaId" parameterType="String" resultType="int">
+        select classId from course where teaId=#{teaId}
+    </select>
+    <delete id="deleteTeacherById" parameterType="String">
+        delete from teacher where teaId=#{teaId}
+    </delete>
+
+
 
 </mapper>

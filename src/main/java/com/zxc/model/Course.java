@@ -1,6 +1,9 @@
 package com.zxc.model;
 
+import org.springframework.stereotype.Component;
+
 import java.util.List;
+
 
 public class Course {
     private int classId;
@@ -83,6 +86,12 @@ public class Course {
 
     public int getScore() {
         return score;
+    }
+
+
+    @Override
+    public String toString() {
+        return this.classId+","+this.classId+":课程";
     }
 }
 

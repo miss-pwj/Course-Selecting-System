@@ -1,5 +1,7 @@
 package com.zxc.model;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 
 public class User {

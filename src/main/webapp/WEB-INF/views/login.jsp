@@ -1,10 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
-<%@ taglib prefix="c"
-           uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     String path = request.getContextPath();
+//    System.out.println("request.getContextPath:"+path);
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
+//    System.out.println("basePath:"+basePath);
 %>
 <html>
 <head>
@@ -36,6 +37,11 @@
             <input placeholder="密码" type="password" name="userpass" tabindex="2" required>
         </fieldset>
         <fieldset>
+          <input placeholder="学生" type="radio" name="sex" value="1" checked required>学生<%--设置默认选择学生--%>
+            <input placeholder="老师" type="radio" name="sex" value="2" required>老师
+        </fieldset>
+
+        <fieldset>
             <input name="sub" type="button" onclick="tijiao()" id="contact-submit" value="登录" />
         </fieldset>
     </form>
@@ -43,8 +49,9 @@
     <script>
         $(function () {
             $("#contact-submit").click(function () {
-                var testnum = /^\d{10}$/;
+                var testnum = /^\d{10}$/;//正则表达式表示输入10数字
                 var id=$("#userid").val();
+                var sex = $("#sex").val();
                 if (testnum.test(id)) {
                     $("#contact").submit();
                 }
@@ -53,6 +60,12 @@
             })
         })
     </script>
+
+  <%--  <form action="<%=basePath%>register" method="post">
+        <input type="submit" value="注册">
+    </form>--%>
+        <a href="<%=basePath%>admin">管理员</a>
+
 </div>
 </body>
 </html>

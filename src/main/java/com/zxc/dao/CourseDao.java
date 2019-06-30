@@ -5,6 +5,7 @@ import com.zxc.model.Course_choose;
 import com.zxc.model.Course_limit;
 import com.zxc.model.Institution;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public interface CourseDao {
@@ -23,7 +24,11 @@ public interface CourseDao {
     public void deleteCourseById(int id);
     public void deleteStuByClassId(int id);
     public void deleteLimitByClassId(int id);
+
     public List<Course_choose> queryStuIdByCourseId(int id);
+
+
+
     public void updateScore(Course_choose course_choose);
     public List<Course> queryAllCourse();
     public List<Integer> selectInsIdByClassId(int classId);
@@ -32,6 +37,8 @@ public interface CourseDao {
     public void addChooseNum(int id);
     public void addCourseChoose(Course_choose course_choose);
     public List<Integer> queryCourseIdByStuId(int id);
+
+    public List<Integer> queryCourseIdByTeaId(String teaId);
     public void downChooseNum(int id);
     public void deleteCourseChoose(Course_choose course_choose);
     public int selectScore(Course_choose course_choose);

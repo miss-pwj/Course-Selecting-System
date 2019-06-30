@@ -1,7 +1,8 @@
 package com.zxc.model;
 
-import java.util.List;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
 public class Page {
     private int currentPage;//当前页
     private int pageSize;//每页显示记录条数
@@ -27,6 +28,7 @@ public class Page {
     public void setTotalPage(int totalPage) {
         this.totalPage = totalPage;
     }
+
     public List<?> getDataList() {
         return dataList;
     }

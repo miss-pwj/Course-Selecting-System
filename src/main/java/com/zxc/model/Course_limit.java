@@ -1,5 +1,7 @@
 package com.zxc.model;
 
+import org.springframework.stereotype.Component;
+
 //选课学院限制
 public class Course_limit {
     private int classId;

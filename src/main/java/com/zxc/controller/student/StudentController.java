@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -27,110 +28,117 @@ public class StudentController {
     @Resource
     private CourseService courseService;
 
-    @RequestMapping("/studentIndex")
-    public String studentIndex(){
+    @RequestMapping("/studentIndex")//进入学生首页
+    public String studentIndex() {
         return "student/studentIndex";
     }
 
-    @RequestMapping("/studentInfo")
-    public String studentInfo(@RequestParam("stuid") int id, Model model){
-        model.addAttribute("student",userService.getStuInfoById(id));
+    @RequestMapping("/studentInfo")//进入学生个人资料
+    public String studentInfo(@RequestParam("stuid") int id, Model model) {
+        model.addAttribute("student", userService.getStuInfoById(id));
         return "student/studentInfo";
     }
-    @RequestMapping("/editStuPass")
-    public String editTeaPass(){
+
+    @RequestMapping("/editStuPass")//修改学生密码页面
+    public String editTeaPass() {
         return "student/editStuPass";
     }
 
-    @RequestMapping("/changeStuPass")
-    public String changPass(@RequestParam("prepass") String prepass, @RequestParam("nowpass") String nowpass, Model model, HttpServletRequest request){
-        int id=(int)request.getSession().getAttribute("stuid");
-        if(userService.checkAccount(id,prepass)==0){
-            model.addAttribute("msg","原始密码输入错误!");
+    @RequestMapping("/changeStuPass")//修改学生密码
+    public String changPass(@RequestParam("prepass") String prepass, @RequestParam("nowpass") String nowpass, Model model, HttpServletRequest request) {
+        int id = (int) request.getSession().getAttribute("stuid");
+        if (userService.checkAccount(id, prepass) == 0) {
+            model.addAttribute("msg", "原始密码输入错误!");
             return "student/editStuPass";
-        }
-        else{
-            Student student=new Student();
+        } else {
+            Student student = new Student();
             student.setStuId(id);
             student.setStuPass(nowpass);
             userService.changeStuPass(student);
-            model.addAttribute("student",userService.getStuInfoById(id));
+            model.addAttribute("student", userService.getStuInfoById(id));//将修改后的信息传入前台
             return "student/studentInfo";
         }
     }
 
-    @RequestMapping("/courseList")
-    public String courseList(@Param("page") int page, Model model,HttpServletRequest request){
-        model.addAttribute("paging",pageService.subList(page,courseService.queryAllCourse((int)request.getSession().getAttribute("stuid"))));
-        model.addAttribute("teaList",userService.queryAllTeacher());
-        model.addAttribute("insList",courseService.queryAllIns());
+    @RequestMapping("/courseList")//排课的页面
+    public String courseList(@Param("page") int page, Model model, HttpServletRequest request) {
+        model.addAttribute("paging", pageService.subList(page, courseService.queryAllCourse((int) request.getSession().getAttribute("stuid"))));
+        model.addAttribute("teaList", userService.queryAllTeacher());
+        model.addAttribute("insList", courseService.queryAllIns());
         return "student/courseList";
     }
 
-    @RequestMapping("/courseDetail")
-    public String courseDetail(@Param("classId") int classId,Model model,HttpServletRequest request){
-        if(courseService.checkStuIns(classId,(int)request.getSession().getAttribute("stuid"))){
-            model.addAttribute("course",courseService.queryCourse(classId));
+    @RequestMapping("/courseDetail")//进行选课操作
+    public String courseDetail(@Param("classId") int classId, Model model, HttpServletRequest request) {
+        if (courseService.checkStuIns(classId, (int) request.getSession().getAttribute("stuid"))) {
+            model.addAttribute("course", courseService.queryCourse(classId));
             return "student/courseDetail";
-        }
-        else{
-            model.addAttribute("msg","请注意课程的学院限制");
-            model.addAttribute("paging",pageService.subList(1,courseService.queryAllCourse((int)request.getSession().getAttribute("stuid"))));
-            model.addAttribute("teaList",userService.queryAllTeacher());
-            model.addAttribute("insList",courseService.queryAllIns());
+        } else {
+            model.addAttribute("msg", "请注意课程的学院限制");
+            model.addAttribute("paging", pageService.subList(1, courseService.queryAllCourse((int) request.getSession().getAttribute("stuid"))));
+            model.addAttribute("teaList", userService.queryAllTeacher());
+            model.addAttribute("insList", courseService.queryAllIns());
             return "student/courseList";
         }
     }
 
-    @RequestMapping("/chooseSuccess")
-    public String chooseSuccess(@Param("stuid") int stuid,@Param("courseid") int courseid,Model model){
-        courseService.chooseSuccess(courseid,stuid);
-        model.addAttribute("paging",pageService.subList(1,courseService.queryAllCourse(stuid)));
-        model.addAttribute("teaList",userService.queryAllTeacher());
-        model.addAttribute("insList",courseService.queryAllIns());
+    @RequestMapping("/chooseSuccess")//选课成工页面跳转回选课页面
+    public String chooseSuccess(@Param("stuid") int stuid, @Param("courseid") int courseid, Model model) {
+        courseService.chooseSuccess(courseid, stuid);
+        model.addAttribute("paging", pageService.subList(1, courseService.queryAllCourse(stuid)));
+        model.addAttribute("teaList", userService.queryAllTeacher());
+        model.addAttribute("insList", courseService.queryAllIns());
         return "student/courseList";
     }
 
-    @RequestMapping("/deleteCourse")
-    public String deleteCourse(@Param("courseid") int courseid,Model model,HttpServletRequest request){
-        courseService.deleteCourseChoose((int)request.getSession().getAttribute("stuid"),courseid);
-        model.addAttribute("paging",pageService.subList(1,courseService.queryAllCourse((int)request.getSession().getAttribute("stuid"))));
-        model.addAttribute("teaList",userService.queryAllTeacher());
-        model.addAttribute("insList",courseService.queryAllIns());
+    @RequestMapping("/deleteCourse")//退选
+    public String deleteCourse(@Param("courseid") int courseid, Model model, HttpServletRequest request) {
+        courseService.deleteCourseChoose((int) request.getSession().getAttribute("stuid"), courseid);
+        model.addAttribute("paging", pageService.subList(1, courseService.queryAllCourse((int) request.getSession().getAttribute("stuid"))));
+        model.addAttribute("teaList", userService.queryAllTeacher());
+        model.addAttribute("insList", courseService.queryAllIns());
         return "student/courseList";
     }
 
-    @RequestMapping("/checkedCourseList")
-    public String checkedCourseList(Model model,HttpServletRequest request){
-        model.addAttribute("courseList",courseService.queryStuCourse((int)request.getSession().getAttribute("stuid")));
+    @RequestMapping("/checkedCourseList")//查看我的选课
+    public String checkedCourseList(Model model, HttpServletRequest request) {
+        model.addAttribute("courseList", courseService.queryStuCourse((int) request.getSession().getAttribute("stuid")));
         return "student/checkedCourseList";
     }
 
-    @RequestMapping("/searchCourse")
-    public String searchCourse(@Param("courseid") int courseid, Model model){
-        List<Course> cor_list=new ArrayList<>();
-        cor_list.add(courseService.queryCourse(courseid));
-        model.addAttribute("paging",pageService.subList(1,cor_list));
-        model.addAttribute("teaList",userService.queryAllTeacher());
-        model.addAttribute("insList",courseService.queryAllIns());
+    @RequestMapping("/searchCourse")//根据课程编号搜索课程
+    public String searchCourse(@Param("courseid") int courseid, Model model) {
+        System.err.println("进入搜索课程了哦");
+        List<Course> cor_list = new ArrayList<>();
+        Course course=courseService.queryCourse(courseid);
+        if(course==null){
+            System.out.println("该课程不存在");
+            model.addAttribute("msg", "该课程不存在");
+            return "Z";
+
+        }
+        cor_list.add(course);
+        model.addAttribute("paging", pageService.subList(1, cor_list));
+        model.addAttribute("teaList", userService.queryAllTeacher());
+        model.addAttribute("insList", courseService.queryAllIns());
         return "student/courseList";
     }
 
-    @RequestMapping("/searchListByTeaId")
-    public String searchListByTeaId(@Param("teaid") int teaid,Model model){
-        List<Course> cor_list=courseService.queryAllById(teaid);
-        model.addAttribute("paging",pageService.subList(1,cor_list));
-        model.addAttribute("teaList",userService.queryAllTeacher());
-        model.addAttribute("insList",courseService.queryAllIns());
+    @RequestMapping("/searchListByTeaId")//根据老师查询课程
+    public String searchListByTeaId(@Param("teaid") int teaid, Model model) {
+        List<Course> cor_list = courseService.queryAllById(teaid);
+        model.addAttribute("paging", pageService.subList(1, cor_list));
+        model.addAttribute("teaList", userService.queryAllTeacher());
+        model.addAttribute("insList", courseService.queryAllIns());
         return "student/courseList";
     }
 
-    @RequestMapping("/searchListByInsId")
-    public String searchListByInsId(@Param("insid") int insid,Model model){
-        List<Course> cor_list=courseService.queryAllByInsId(insid);
-        model.addAttribute("paging",pageService.subList(1,cor_list));
-        model.addAttribute("teaList",userService.queryAllTeacher());
-        model.addAttribute("insList",courseService.queryAllIns());
+    @RequestMapping("/searchListByInsId")//根据学院查询课程
+    public String searchListByInsId(@Param("insid") int insid, Model model) {
+        List<Course> cor_list = courseService.queryAllByInsId(insid);
+        model.addAttribute("paging", pageService.subList(1, cor_list));
+        model.addAttribute("teaList", userService.queryAllTeacher());
+        model.addAttribute("insList", courseService.queryAllIns());
         return "student/courseList";
     }
 }

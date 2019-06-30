@@ -95,4 +95,10 @@
     <select id="selectScore" parameterType="Course_choose" resultType="int">
         SELECT score FROM Course_choose WHERE classId=#{classId} AND stuId=#{stuId}
     </select>
+
+    <select id="queryCourseIdByTeaId" parameterType="String" resultType="int">
+        select classId from course WHERE teaId=#{teaId}
+    </select>
+
+
 </mapper>

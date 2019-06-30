@@ -1,5 +1,7 @@
 package com.zxc.model;
 
+import org.springframework.stereotype.Component;
+
 public class Student {
     private int stuId;
     private String stuPass;
@@ -7,6 +9,16 @@ public class Student {
     private int insId;
     private String InsName;
     private int tempScore;
+
+    public Student() {
+    }
+
+    public Student(int stuId, String stuName,String stuPass, int insId) {
+        this.stuId = stuId;
+        this.stuPass = stuPass;
+        this.stuName = stuName;
+        this.insId = insId;
+    }
 
     public void setStuId(int stuId) {
         this.stuId = stuId;
@@ -54,5 +66,11 @@ public class Student {
 
     public int getTempScore() {
         return tempScore;
+    }
+
+
+    @Override
+    public String toString() {
+        return "学生信息："+this.getStuId()+","+this.getStuName()+","+this.getStuPass();
     }
 }
